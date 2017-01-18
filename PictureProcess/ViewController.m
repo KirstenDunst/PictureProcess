@@ -25,8 +25,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
-
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self createView];
+}
+- (void)createView{
     UIImageView * imageView = [[UIImageView alloc]init];
     imageView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height/2);
     imageView.image = [UIImage imageNamed:@"default.jpg"];
@@ -38,10 +40,6 @@
     newImageView.frame = CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, self.view.frame.size.height/2);
     newImageView.image = inputImage;
     [self.view addSubview:newImageView];
-    
-    
-    //调节亮度
-     [self AdjustBrightnessWithFloat:0];
     
     
     process = [[UIProgressView alloc]initWithFrame:CGRectMake(20, self.view.frame.size.height-50, self.view.frame.size.width-40, 20)];
@@ -60,34 +58,19 @@
     [myView addGestureRecognizer:pan];
     
     
-//    //GPUImageStretchDistortionFilter *disFilter =[[GPUImageStretchDistortionFilter alloc] init];
-//    //GPUImageBulgeDistortionFilter *disFilter = [[GPUImageBulgeDistortionFilter alloc] init];
-//    //GPUImagePinchDistortionFilter *disFilter = [[GPUImagePinchDistortionFilter alloc] init];
-//    //GPUImageGlassSphereFilter *disFilter = [[GPUImageGlassSphereFilter alloc] init];
-//    //GPUImageSphereRefractionFilter *disFilter = [[GPUImageSphereRefractionFilter alloc] init];
-//    //GPUImageToonFilter *disFilter = [[GPUImageToonFilter alloc] init];
-//    GPUImageVignetteFilter *disFilter = [[GPUImageVignetteFilter alloc] init];
-//    //设置要渲染的区域
-//    [disFilter forceProcessingAtSize:image.size];
-//    [disFilter useNextFrameForImageCapture];
-//    //获取数据源
-//    GPUImagePicture *stillImageSource = [[GPUImagePicture alloc]initWithImage:image];
-//    //添加上滤镜
-//    [stillImageSource addTarget:disFilter];
-//    //开始渲染
-//    [stillImageSource processImage];
-//    //获取渲染后的图片
-//    UIImage *newImage = [disFilter imageFromCurrentFramebuffer];
-//    //加载出来
-//    UIImageView *imageView = [[UIImageView alloc] initWithImage:newImage];
-//    imageView.frame = CGRectMake(50,50,image.size.width ,image.size.height);
-//    [self.view addSubview:imageView];
     
     
+    //调节亮度
+//    [self AdjustBrightnessWithFloat:0];
+    
+    //添加滤镜
+    [self addFilter];
+    
+    
+    
+
 }
 - (void)buttonChoose:(UIPanGestureRecognizer *)sender{
-    
-    
     
     CGPoint translation = [sender translationInView:process];
     
@@ -111,9 +94,16 @@
     
    
     CGFloat newValue = (CGFloat)(myView.center.x-process.frame.size.width/2)/(process.frame.size.width/2);
-    [self AdjustBrightnessWithFloat:newValue];
+    
+    
+    
+    
+    
+    //调节亮度
+//    [self AdjustBrightnessWithFloat:newValue];
     
 }
+
 
 - (void)AdjustBrightnessWithFloat: (CGFloat)brightFloat{
     //创建一个高亮度的滤镜
@@ -135,6 +125,39 @@
     
     newImageView.image = newImage;
 }
+
+
+- (void)addFilter{
+    /*
+     部分滤镜是需要参数设置的
+     参数这里都做默认处理
+     有需要参数设置的可以ui界面设置优化
+     */
+//    GPUImageStretchDistortionFilter *disFilter =[[GPUImageStretchDistortionFilter alloc] init];
+//    GPUImageBulgeDistortionFilter *disFilter = [[GPUImageBulgeDistortionFilter alloc] init];
+//    GPUImagePinchDistortionFilter *disFilter = [[GPUImagePinchDistortionFilter alloc] init];
+//    GPUImageGlassSphereFilter *disFilter = [[GPUImageGlassSphereFilter alloc] init];
+//    GPUImageSphereRefractionFilter *disFilter = [[GPUImageSphereRefractionFilter alloc] init];
+//    GPUImageToonFilter *disFilter = [[GPUImageToonFilter alloc] init];
+    
+    GPUImageVignetteFilter *disFilter = [[GPUImageVignetteFilter alloc] init];
+    //设置要渲染的区域
+    [disFilter forceProcessingAtSize:inputImage.size];
+    [disFilter useNextFrameForImageCapture];
+    //获取数据源
+    GPUImagePicture *stillImageSource = [[GPUImagePicture alloc]initWithImage:inputImage];
+    //添加上滤镜
+    [stillImageSource addTarget:disFilter];
+    //开始渲染
+    [stillImageSource processImage];
+    //获取渲染后的图片
+    UIImage *newImage = [disFilter imageFromCurrentFramebuffer];
+    //加载出来
+    newImageView.image = newImage;
+}
+
+
+
 
 
 
