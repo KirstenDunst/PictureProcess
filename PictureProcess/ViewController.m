@@ -15,7 +15,8 @@
 {
     UIImage *inputImage;
     UIView *myView;
-    UIProgressView *process;
+    UIView *bgView;
+    UIView *OnView;
     UIImageView * newImageView;
 }
 @end
@@ -42,18 +43,22 @@
     [self.view addSubview:newImageView];
     
     
-    process = [[UIProgressView alloc]initWithFrame:CGRectMake(20, self.view.frame.size.height-50, self.view.frame.size.width-40, 20)];
-    process.progress = 0.5;
-    process.progressTintColor = [UIColor blueColor];
-    [self.view addSubview:process];
-    
+    bgView = [[UIView alloc]initWithFrame:CGRectMake(20, self.view.frame.size.height-50, self.view.frame.size.width-40, 40)];
+    bgView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:bgView];
+    UIView *showView = [[UIView alloc]initWithFrame:CGRectMake(20, bgView.frame.size.height-20-3, bgView.frame.size.width-40, 6)];
+    showView.backgroundColor = [UIColor whiteColor];
+    [bgView addSubview:showView];
+    OnView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, showView.frame.size.width/2, showView.frame.size.height)];
+    OnView.backgroundColor = [UIColor blueColor];
+    [showView addSubview:OnView];
     myView = [[UIView alloc]init];
-    myView.center = CGPointMake(process.frame.size.width/2, process.frame.size.height/2);
-    myView.bounds = CGRectMake(0, 0, 20, 20);
+    myView.center = CGPointMake(bgView.frame.size.width/2, bgView.frame.size.height/2);
+    myView.bounds = CGRectMake(0, 0, 40, 40);
     [myView setBackgroundColor:[UIColor redColor]];
-    myView.layer.cornerRadius = 10;
+    myView.layer.cornerRadius = 20;
     myView.clipsToBounds = YES;
-    [process addSubview:myView];
+    [bgView addSubview:myView];
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(buttonChoose:)];
     [myView addGestureRecognizer:pan];
     
@@ -61,10 +66,10 @@
     
     
     //调节亮度
-//    [self AdjustBrightnessWithFloat:0];
+    [self AdjustBrightnessWithFloat:0];
     
     //添加滤镜
-    [self addFilter];
+//    [self addFilter];
     
     
     
@@ -72,35 +77,34 @@
 }
 - (void)buttonChoose:(UIPanGestureRecognizer *)sender{
     
-    CGPoint translation = [sender translationInView:process];
+    CGPoint translation = [sender translationInView:bgView];
     
     NSLog(@"%f",translation.x);
     
-    if (myView.center.x<0) {
+    if (myView.center.x<20) {
         if (translation.x>0) {
-             myView.center = CGPointMake(myView.center.x+translation.x, process.frame.size.height/2);
+             myView.center = CGPointMake(myView.center.x+translation.x, myView.center.y);
         }
-    }else if (myView.center.x>process.frame.size.width){
+    }else if (myView.center.x>bgView.frame.size.width-20){
         if (translation.x<0) {
-             myView.center = CGPointMake(myView.center.x+translation.x, process.frame.size.height/2);
+             myView.center = CGPointMake(myView.center.x+translation.x, myView.center.y);
         }
     }else{
-        myView.center = CGPointMake(myView.center.x+translation.x, process.frame.size.height/2);
+        myView.center = CGPointMake(myView.center.x+translation.x, myView.center.y);
     }
+    OnView.frame = CGRectMake(0, 0, myView.center.x-20, OnView.frame.size.height);
     
-    process.progress = (CGFloat)myView.center.x/process.frame.size.width;
+    [sender setTranslation:CGPointMake(0, 0) inView:bgView];
     
-    [sender setTranslation:CGPointMake(0, 0) inView:process];
     
-   
-    CGFloat newValue = (CGFloat)(myView.center.x-process.frame.size.width/2)/(process.frame.size.width/2);
+    CGFloat newValue = (CGFloat)((myView.center.x-20)-(bgView.frame.size.width-40)/2)/((bgView.frame.size.width-40)/2);
     
     
     
     
     
     //调节亮度
-//    [self AdjustBrightnessWithFloat:newValue];
+    [self AdjustBrightnessWithFloat:newValue];
     
 }
 
