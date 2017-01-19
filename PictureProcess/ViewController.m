@@ -18,6 +18,8 @@
     UIView *bgView;
     UIView *OnView;
     UIImageView * newImageView;
+    
+    UISlider *slider;
 }
 @end
 
@@ -42,25 +44,31 @@
     newImageView.image = inputImage;
     [self.view addSubview:newImageView];
     
+    //自定义滑动条
+//    bgView = [[UIView alloc]initWithFrame:CGRectMake(20, self.view.frame.size.height-50, self.view.frame.size.width-40, 40)];
+//    bgView.backgroundColor = [UIColor clearColor];
+//    [self.view addSubview:bgView];
+//    UIView *showView = [[UIView alloc]initWithFrame:CGRectMake(20, bgView.frame.size.height-20-3, bgView.frame.size.width-40, 6)];
+//    showView.backgroundColor = [UIColor whiteColor];
+//    [bgView addSubview:showView];
+//    OnView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, showView.frame.size.width/2, showView.frame.size.height)];
+//    OnView.backgroundColor = [UIColor blueColor];
+//    [showView addSubview:OnView];
+//    myView = [[UIView alloc]init];
+//    myView.center = CGPointMake(bgView.frame.size.width/2, bgView.frame.size.height/2);
+//    myView.bounds = CGRectMake(0, 0, 40, 40);
+//    [myView setBackgroundColor:[UIColor redColor]];
+//    myView.layer.cornerRadius = 20;
+//    myView.clipsToBounds = YES;
+//    [bgView addSubview:myView];
+//    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(buttonChoose:)];
+//    [myView addGestureRecognizer:pan];
     
-    bgView = [[UIView alloc]initWithFrame:CGRectMake(20, self.view.frame.size.height-50, self.view.frame.size.width-40, 40)];
-    bgView.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:bgView];
-    UIView *showView = [[UIView alloc]initWithFrame:CGRectMake(20, bgView.frame.size.height-20-3, bgView.frame.size.width-40, 6)];
-    showView.backgroundColor = [UIColor whiteColor];
-    [bgView addSubview:showView];
-    OnView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, showView.frame.size.width/2, showView.frame.size.height)];
-    OnView.backgroundColor = [UIColor blueColor];
-    [showView addSubview:OnView];
-    myView = [[UIView alloc]init];
-    myView.center = CGPointMake(bgView.frame.size.width/2, bgView.frame.size.height/2);
-    myView.bounds = CGRectMake(0, 0, 40, 40);
-    [myView setBackgroundColor:[UIColor redColor]];
-    myView.layer.cornerRadius = 20;
-    myView.clipsToBounds = YES;
-    [bgView addSubview:myView];
-    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(buttonChoose:)];
-    [myView addGestureRecognizer:pan];
+    slider = [[UISlider alloc]initWithFrame:CGRectMake(20, self.view.frame.size.height-50, self.view.frame.size.width-40, 40)];
+    [slider addTarget:self action:@selector(changeValue:) forControlEvents:UIControlEventValueChanged];
+    slider.value = 0.5;
+    [self.view addSubview:slider];
+    
     
     
     
@@ -75,37 +83,43 @@
     
 
 }
-- (void)buttonChoose:(UIPanGestureRecognizer *)sender{
+//- (void)buttonChoose:(UIPanGestureRecognizer *)sender{
+//    
+//    CGPoint translation = [sender translationInView:bgView];
+//    
+//    NSLog(@"%f",translation.x);
+//    
+//    if (myView.center.x<20) {
+//        if (translation.x>0) {
+//             myView.center = CGPointMake(myView.center.x+translation.x, myView.center.y);
+//        }
+//    }else if (myView.center.x>bgView.frame.size.width-20){
+//        if (translation.x<0) {
+//             myView.center = CGPointMake(myView.center.x+translation.x, myView.center.y);
+//        }
+//    }else{
+//        myView.center = CGPointMake(myView.center.x+translation.x, myView.center.y);
+//    }
+//    OnView.frame = CGRectMake(0, 0, myView.center.x-20, OnView.frame.size.height);
+//    
+//    [sender setTranslation:CGPointMake(0, 0) inView:bgView];
+//    
+//    
+//    CGFloat newValue = (CGFloat)((myView.center.x-20)-(bgView.frame.size.width-40)/2)/((bgView.frame.size.width-40)/2);
+//    
+//    
+//    
+//    
+//    
+//    //调节亮度
+//    [self AdjustBrightnessWithFloat:newValue];
+//    
+//}
+- (void)changeValue: (UISlider *)sender{
     
-    CGPoint translation = [sender translationInView:bgView];
+    float a = (float)(slider.value-0.5)/0.5;
     
-    NSLog(@"%f",translation.x);
-    
-    if (myView.center.x<20) {
-        if (translation.x>0) {
-             myView.center = CGPointMake(myView.center.x+translation.x, myView.center.y);
-        }
-    }else if (myView.center.x>bgView.frame.size.width-20){
-        if (translation.x<0) {
-             myView.center = CGPointMake(myView.center.x+translation.x, myView.center.y);
-        }
-    }else{
-        myView.center = CGPointMake(myView.center.x+translation.x, myView.center.y);
-    }
-    OnView.frame = CGRectMake(0, 0, myView.center.x-20, OnView.frame.size.height);
-    
-    [sender setTranslation:CGPointMake(0, 0) inView:bgView];
-    
-    
-    CGFloat newValue = (CGFloat)((myView.center.x-20)-(bgView.frame.size.width-40)/2)/((bgView.frame.size.width-40)/2);
-    
-    
-    
-    
-    
-    //调节亮度
-    [self AdjustBrightnessWithFloat:newValue];
-    
+    [self AdjustBrightnessWithFloat:a];
 }
 
 
@@ -128,15 +142,18 @@
     UIImage *newImage = [brightness imageFromCurrentFramebuffer];
     
     newImageView.image = newImage;
+    
 }
 
 
 - (void)addFilter{
+    
     /*
      部分滤镜是需要参数设置的
      参数这里都做默认处理
      有需要参数设置的可以ui界面设置优化
      */
+    
     //伸展失真（哈哈镜）
 //    GPUImageStretchDistortionFilter *disFilter =[[GPUImageStretchDistortionFilter alloc] init];
     //凸起失真，鱼眼效果
@@ -165,6 +182,7 @@
     UIImage *newImage = [disFilter imageFromCurrentFramebuffer];
     //加载出来
     newImageView.image = newImage;
+    
 }
 
 
