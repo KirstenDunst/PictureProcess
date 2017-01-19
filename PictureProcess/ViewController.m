@@ -137,13 +137,20 @@
      参数这里都做默认处理
      有需要参数设置的可以ui界面设置优化
      */
+    //伸展失真（哈哈镜）
 //    GPUImageStretchDistortionFilter *disFilter =[[GPUImageStretchDistortionFilter alloc] init];
+    //凸起失真，鱼眼效果
 //    GPUImageBulgeDistortionFilter *disFilter = [[GPUImageBulgeDistortionFilter alloc] init];
+    //收缩失真（凹面镜）
 //    GPUImagePinchDistortionFilter *disFilter = [[GPUImagePinchDistortionFilter alloc] init];
+    //水晶球效果
 //    GPUImageGlassSphereFilter *disFilter = [[GPUImageGlassSphereFilter alloc] init];
+    //球形折射，图形倒立
 //    GPUImageSphereRefractionFilter *disFilter = [[GPUImageSphereRefractionFilter alloc] init];
+    //卡通效果（黑色粗线描边）
 //    GPUImageToonFilter *disFilter = [[GPUImageToonFilter alloc] init];
     
+    //晕影，形成黑色圆形边缘，突出中间图像的效果
     GPUImageVignetteFilter *disFilter = [[GPUImageVignetteFilter alloc] init];
     //设置要渲染的区域
     [disFilter forceProcessingAtSize:inputImage.size];
