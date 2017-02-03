@@ -80,9 +80,8 @@
 //    [self addFilter];
     
     
-    
-
 }
+
 //- (void)buttonChoose:(UIPanGestureRecognizer *)sender{
 //    
 //    CGPoint translation = [sender translationInView:bgView];
@@ -115,7 +114,10 @@
 //    [self AdjustBrightnessWithFloat:newValue];
 //    
 //}
+
 - (void)changeValue: (UISlider *)sender{
+    
+    //以0.5为中心左右范围（-1～1）
     
     float a = (float)(slider.value-0.5)/0.5;
     
